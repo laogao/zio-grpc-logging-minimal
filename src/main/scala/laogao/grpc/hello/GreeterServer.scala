@@ -12,12 +12,6 @@ case class User(id: Long, name: String)
 
 object GreeterImpl extends ZGreeter[ZEnv with Logging, Has[User]] {
 
-  val logging =
-    Logging.console(
-      logLevel = LogLevel.Debug,
-      format = LogFormat.ColoredLogFormat()
-    ) >>> Logging.withRootLoggerName("zio-grpc-demo")
-
   def sayHello(request: HelloRequest): ZIO[ZEnv with Has[User] with Logging, Status, HelloReply] =
     for {
       _ <- log.info(s"Got request: $request")
@@ -25,9 +19,6 @@ object GreeterImpl extends ZGreeter[ZEnv with Logging, Has[User]] {
     } yield HelloReply(s"Hello, ${if (user.id > 0) user.name else request.name}!")
 
 }
-
-import scalapb.zio_grpc.ServerMain
-import scalapb.zio_grpc.ServiceList
 
 object GreeterServer extends zio.App {
   val USER_KEY = io.grpc.Metadata.Key.of("user-token", io.grpc.Metadata.ASCII_STRING_MARSHALLER)
