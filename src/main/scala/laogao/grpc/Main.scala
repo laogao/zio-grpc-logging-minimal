@@ -35,6 +35,6 @@ object Main extends zio.App {
 
   // by providing GreeterServer this way we don't have to manually (re)start it for quick demo
   final def run(args: List[String]) =
-    myAppLogic.provideCustomLayer(GreeterServer.serverLive ++ logging).exitCode
+    myAppLogic.provideCustomLayer(logging ++ GreeterServer.ourApp).exitCode
 
 }
